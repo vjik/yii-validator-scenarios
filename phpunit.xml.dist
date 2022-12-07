@@ -18,7 +18,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="_____ tests">
+        <testsuite name="Yii Validator Scenarios tests">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
