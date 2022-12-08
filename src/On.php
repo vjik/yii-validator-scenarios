@@ -6,6 +6,7 @@ namespace Vjik\Yii\ValidatorScenarios;
 
 use Attribute;
 use Closure;
+use InvalidArgumentException;
 use Stringable;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\Helper\RulesNormalizer;
@@ -36,7 +37,10 @@ final class On implements
 
     public const SCENARIO_PARAMETER = 'scenario';
 
-    private ?string $scenario;
+    /**
+     * @var string[]|null
+     */
+    private ?array $scenarios;
 
     /**
      * @var iterable<int, RuleInterface>
@@ -45,11 +49,15 @@ final class On implements
 
     private ?RulesDumper $rulesDumper = null;
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         /**
-         * @var string|Stringable|null The scenario that rules are in. Null if rules used always.
+         * @var string|Stringable|string[]|Stringable[]|null The scenario(s) that rules are in. Null if rules used
+         * always.
          */
-        string|Stringable|null $scenario = null,
+        string|Stringable|array|null $scenario = null,
         /**
          * @param iterable<callable|RuleInterface>|callable|RuleInterface Rules to apply.
          */
@@ -65,7 +73,7 @@ final class On implements
          */
         private Closure|null $when = null,
     ) {
-        $this->scenario = $scenario instanceof Stringable ? (string) $scenario : $scenario;
+        $this->setScenarios($scenario);
         $this->rules = RulesNormalizer::normalizeList($rules);
     }
 
@@ -79,9 +87,9 @@ final class On implements
         return OnHandler::class;
     }
 
-    public function getScenario(): ?string
+    public function getScenarios(): ?array
     {
-        return $this->scenario;
+        return $this->scenarios;
     }
 
     /**
@@ -100,7 +108,7 @@ final class On implements
     public function getOptions(): array
     {
         return [
-            'scenario' => $this->scenario,
+            'scenarios' => $this->scenarios,
             'rules' => $this->getRulesDumper()->asArray($this->rules),
             'not' => $this->not,
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
@@ -124,6 +132,36 @@ final class On implements
         }
 
         return $this->rulesDumper;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function setScenarios(mixed $sourceScenario): void
+    {
+        if ($sourceScenario === null) {
+            $this->scenarios = null;
+            return;
+        }
+
+        $this->scenarios = array_map(
+            static function (mixed $scenario): string {
+                if (
+                    is_string($scenario)
+                    || $scenario instanceof Stringable
+                ) {
+                    return (string) $scenario;
+                }
+
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Scenario must be null, a string, or an array of strings or an array of "\Stringable", "%s" given.',
+                        get_debug_type($scenario)
+                    ),
+                );
+            },
+            is_array($sourceScenario) ? $sourceScenario : [$sourceScenario]
+        );
     }
 }
 

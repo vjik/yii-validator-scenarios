@@ -13,6 +13,9 @@ use Yiisoft\Validator\ValidationContext;
 
 final class OnHandler implements RuleHandlerInterface
 {
+    /**
+     * @throws InvalidArgumentException
+     */
     public function validate(mixed $value, object $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof On) {
@@ -40,7 +43,7 @@ final class OnHandler implements RuleHandlerInterface
     }
 
     /**
-     * @throw InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function prepareScenarioValue(mixed $scenario): ?string
     {
@@ -57,8 +60,15 @@ final class OnHandler implements RuleHandlerInterface
 
     private function isSatisfied(On $rule, ?string $scenario): bool
     {
-        return $rule->isNot()
-            ? $rule->getScenario() !== $scenario
-            : ($rule->getScenario() === null || $rule->getScenario() === $scenario);
+        $ruleScenarios = $rule->getScenarios();
+
+        if ($rule->isNot()) {
+            return $ruleScenarios === null
+                ? $scenario !== null
+                : !in_array($scenario, $ruleScenarios, true);
+        }
+
+        return $rule->getScenarios() === null
+            || in_array($scenario, $rule->getScenarios(), true);
     }
 }

@@ -26,7 +26,7 @@ final class OnTest extends TestCase
         $rules = $rule->getRules();
 
         $this->assertSame('on', $rule->getName());
-        $this->assertNull($rule->getScenario());
+        $this->assertNull($rule->getScenarios());
         $this->assertInstanceOf(Traversable::class, $rules);
         $this->assertSame([], iterator_to_array($rules));
     }
@@ -36,7 +36,7 @@ final class OnTest extends TestCase
         return [
             [
                 [
-                    'scenario' => null,
+                    'scenarios' => null,
                     'rules' => [],
                     'not' => false,
                     'skipOnEmpty' => false,
@@ -46,7 +46,17 @@ final class OnTest extends TestCase
             ],
             [
                 [
-                    'scenario' => 'test',
+                    'scenarios' => ['register', 'login'],
+                    'rules' => [],
+                    'not' => false,
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+                new On(['register', new StringableObject('login')]),
+            ],
+            [
+                [
+                    'scenarios' => ['test'],
                     'rules' => [
                         [
                             'inRange',
@@ -128,7 +138,7 @@ final class OnTest extends TestCase
                 [
                     'a' => [
                         'Value must be no greater than 1.',
-                        'Value must be no greater than 2.'
+                        'Value must be no greater than 2.',
                     ],
                 ],
                 ['a' => 7],
@@ -144,7 +154,7 @@ final class OnTest extends TestCase
                 [
                     'a' => [
                         'Value must be no greater than 1.',
-                        'Value must be no greater than 2.'
+                        'Value must be no greater than 2.',
                     ],
                 ],
                 ['a' => 7],
@@ -159,7 +169,7 @@ final class OnTest extends TestCase
             [
                 [
                     'a' => [
-                        'Value must be no greater than 2.'
+                        'Value must be no greater than 2.',
                     ],
                 ],
                 ['a' => 7],
@@ -189,7 +199,7 @@ final class OnTest extends TestCase
             [
                 [
                     'a' => [
-                        'Value must be no greater than 2.'
+                        'Value must be no greater than 2.',
                     ],
                 ],
                 ['a' => 7],
@@ -204,12 +214,33 @@ final class OnTest extends TestCase
             [
                 [
                     '' => [
-                        'Scenario must be null, a string or "\Stringable" type, "stdClass" given.'
+                        'Scenario must be null, a string or "\Stringable" type, "stdClass" given.',
                     ],
                 ],
                 7,
                 [new On()],
                 new stdClass(),
+            ],
+            [
+                [
+                    'a' => [
+                        'Value must be no greater than 1.',
+                        'Value must be no greater than 2.',
+                        'Value must be no greater than 3.',
+                        'Value must be no greater than 5.',
+                    ],
+                ],
+                ['a' => 7],
+                [
+                    'a' => [
+                        new On([new StringableObject('x'), 'y'], new Number(max: 1)),
+                        new On(null, new Number(max: 2)),
+                        new On(['x'], new Number(max: 3)),
+                        new On(['y'], new Number(max: 4)),
+                        new On([new StringableObject('y'), 'x'], new Number(max: 5)),
+                    ],
+                ],
+                'x',
             ],
         ];
     }
@@ -244,5 +275,29 @@ final class OnTest extends TestCase
             'Expected "Vjik\Yii\ValidatorScenarios\On", but "Yiisoft\Validator\Rule\Number" given.'
         );
         $handler->validate(7, $rule, $context);
+    }
+
+    public function dataInvalidRuleScenario(): array
+    {
+        return [
+            'null' => [
+                'Scenario must be null, a string, or an array of strings or an array of "\Stringable", "null" given.',
+                [null],
+            ],
+            'object' => [
+                'Scenario must be null, a string, or an array of strings or an array of "\Stringable", "stdClass" given.',
+                [new stdClass()],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataInvalidRuleScenario
+     */
+    public function testInvalidRuleScenario(string $expectedMessage, mixed $scenario): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedMessage);
+        new On($scenario);
     }
 }
