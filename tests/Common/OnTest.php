@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Vjik\Yii\ValidatorScenarios\Tests\Common;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Traversable;
 use Vjik\Yii\ValidatorScenarios\On;
 use Vjik\Yii\ValidatorScenarios\OnHandler;
+use Vjik\Yii\ValidatorScenarios\Tests\Support\StringableObject;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Number;
@@ -35,6 +38,7 @@ final class OnTest extends TestCase
                 [
                     'scenario' => null,
                     'rules' => [],
+                    'not' => false,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -69,6 +73,7 @@ final class OnTest extends TestCase
                             'skipOnError' => false,
                         ],
                     ],
+                    'not' => true,
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -78,6 +83,7 @@ final class OnTest extends TestCase
                         new In([1, 2]),
                         new In([3, 4]),
                     ],
+                    true,
                 ),
             ],
         ];
@@ -115,30 +121,114 @@ final class OnTest extends TestCase
         );
     }
 
-    public function testWithScenario(): void
+    public function dataWithScenario(): array
     {
-        $validator = new Validator();
-
-        $result = $validator->validate(
-            ['a' => 7],
+        return [
             [
-                'a' => [
-                    new On('test', new Number(max: 1)),
-                    new On(null, new Number(max: 2)),
+                [
+                    'a' => [
+                        'Value must be no greater than 1.',
+                        'Value must be no greater than 2.'
+                    ],
                 ],
+                ['a' => 7],
+                [
+                    'a' => [
+                        new On('test', new Number(max: 1)),
+                        new On(null, new Number(max: 2)),
+                    ],
+                ],
+                'test',
             ],
+            [
+                [
+                    'a' => [
+                        'Value must be no greater than 1.',
+                        'Value must be no greater than 2.'
+                    ],
+                ],
+                ['a' => 7],
+                [
+                    'a' => [
+                        new On('test', new Number(max: 1)),
+                        new On(null, new Number(max: 2)),
+                    ],
+                ],
+                new StringableObject('test'),
+            ],
+            [
+                [
+                    'a' => [
+                        'Value must be no greater than 2.'
+                    ],
+                ],
+                ['a' => 7],
+                [
+                    'a' => [
+                        new On('test', new Number(max: 1)),
+                        new On(null, new Number(max: 2)),
+                    ],
+                ],
+                null,
+            ],
+            [
+                [
+                    'a' => [
+                        'Value must be no greater than 1.',
+                    ],
+                ],
+                ['a' => 7],
+                [
+                    'a' => [
+                        new On('test', new Number(max: 1), true),
+                        new On(null, new Number(max: 2), true),
+                    ],
+                ],
+                null,
+            ],
+            [
+                [
+                    'a' => [
+                        'Value must be no greater than 2.'
+                    ],
+                ],
+                ['a' => 7],
+                [
+                    'a' => [
+                        new On('test', new Number(max: 1), true),
+                        new On(null, new Number(max: 2), true),
+                    ],
+                ],
+                'test',
+            ],
+            [
+                [
+                    '' => [
+                        'Scenario must be null, a string or "\Stringable" type, "stdClass" given.'
+                    ],
+                ],
+                7,
+                [new On()],
+                new stdClass(),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataWithScenario
+     */
+    public function testWithScenario(array $expectedMessages, mixed $data, array $rules, mixed $scenario): void
+    {
+        $result = (new Validator())->validate(
+            $data,
+            $rules,
             new ValidationContext([
-                On::SCENARIO_PARAMETER => 'test',
+                On::SCENARIO_PARAMETER => $scenario,
             ]),
         );
 
         $this->assertSame(
-            [
-                'a' => [
-                    'Value must be no greater than 1.',
-                    'Value must be no greater than 2.'
-                ],
-            ],
+            $expectedMessages,
             $result->getErrorMessagesIndexedByPath(),
         );
     }

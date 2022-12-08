@@ -6,6 +6,7 @@ namespace Vjik\Yii\ValidatorScenarios;
 
 use Attribute;
 use Closure;
+use Stringable;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
@@ -35,6 +36,8 @@ final class On implements
 
     public const SCENARIO_PARAMETER = 'scenario';
 
+    private ?string $scenario;
+
     /**
      * @var iterable<int, RuleInterface>
      */
@@ -44,13 +47,14 @@ final class On implements
 
     public function __construct(
         /**
-         * @var string|null The scenario that rules are in. Null if rules used always.
+         * @var string|Stringable|null The scenario that rules are in. Null if rules used always.
          */
-        private ?string $scenario = null,
+        string|Stringable|null $scenario = null,
         /**
          * @param iterable<callable|RuleInterface>|callable|RuleInterface Rules to apply.
          */
         callable|iterable|object $rules = [],
+        private bool $not = false,
         /**
          * @var bool|callable|null
          */
@@ -61,6 +65,7 @@ final class On implements
          */
         private Closure|null $when = null,
     ) {
+        $this->scenario = $scenario instanceof Stringable ? (string) $scenario : $scenario;
         $this->rules = RulesNormalizer::normalizeList($rules);
     }
 
@@ -87,11 +92,17 @@ final class On implements
         return $this->rules;
     }
 
+    public function isNot(): bool
+    {
+        return $this->not;
+    }
+
     public function getOptions(): array
     {
         return [
             'scenario' => $this->scenario,
             'rules' => $this->getRulesDumper()->asArray($this->rules),
+            'not' => $this->not,
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
