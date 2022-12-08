@@ -6,6 +6,7 @@ namespace Vjik\Yii\ValidatorScenarios;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -20,14 +21,19 @@ use Yiisoft\Validator\WhenInterface;
 /**
  * @psalm-import-type WhenType from WhenInterface
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class On implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
+final class On implements
+    RuleWithOptionsInterface,
+    SkipOnErrorInterface,
+    WhenInterface,
+    SkipOnEmptyInterface,
+    AfterInitAttributeEventInterface
 {
-    public const SCENARIO_PARAMETER = 'scenario';
-
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
+
+    public const SCENARIO_PARAMETER = 'scenario';
 
     /**
      * @var iterable<int, RuleInterface>
@@ -89,6 +95,15 @@ final class On implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
+    }
+
+    public function afterInitAttribute(object $object): void
+    {
+        foreach ($this->rules as $rule) {
+            if ($rule instanceof AfterInitAttributeEventInterface) {
+                $rule->afterInitAttribute($object);
+            }
+        }
     }
 
     private function getRulesDumper(): RulesDumper

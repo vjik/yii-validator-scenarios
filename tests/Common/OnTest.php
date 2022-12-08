@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Vjik\Yii\ValidatorScenarios\Tests;
+namespace Vjik\Yii\ValidatorScenarios\Tests\Common;
 
 use PHPUnit\Framework\TestCase;
 use Traversable;
@@ -151,7 +151,7 @@ final class OnTest extends TestCase
 
         $this->expectException(UnexpectedRuleException::class);
         $this->expectExceptionMessage(
-            'Expected "Vjik\Yii\ValidatorScenarios\On", but Yiisoft\Validator\Rule\Number given.'
+            'Expected "Vjik\Yii\ValidatorScenarios\On", but "Yiisoft\Validator\Rule\Number" given.'
         );
         $handler->validate(7, $rule, $context);
     }

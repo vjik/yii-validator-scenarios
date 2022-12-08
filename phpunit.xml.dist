@@ -18,8 +18,12 @@
     </php>
 
     <testsuites>
-        <testsuite name="Yii Validator Scenarios tests">
-            <directory>./tests</directory>
+        <testsuite name="Yii Validator Scenarios common tests">
+            <directory>./tests/Common</directory>
+        </testsuite>
+
+        <testsuite name="Yii Validator Scenarios PHP 8.1 tests">
+            <directory phpVersion="8.1" phpVersionOperator=">=">./tests/Php81</directory>
         </testsuite>
     </testsuites>
 
