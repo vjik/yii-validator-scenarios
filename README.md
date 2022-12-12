@@ -1,4 +1,10 @@
-# Yii Validator Scenarios
+<p align="center">
+    <a href="https://github.com/yiisoft" target="_blank">
+        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px">
+    </a>
+    <h1 align="center">Yii Validator Scenarios</h1>
+    <br>
+</p>
 
 [![Latest Stable Version](https://poser.pugx.org/vjik/yii-validator-scenarios/v/stable.png)](https://packagist.org/packages/vjik/yii-validator-scenarios)
 [![Total Downloads](https://poser.pugx.org/vjik/yii-validator-scenarios/downloads.png)](https://packagist.org/packages/vjik/yii-validator-scenarios)
