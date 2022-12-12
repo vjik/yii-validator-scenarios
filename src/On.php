@@ -9,12 +9,12 @@ use Closure;
 use InvalidArgumentException;
 use Stringable;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
+use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\RulesDumper;
 use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
@@ -116,11 +116,11 @@ final class On implements
         ];
     }
 
-    public function afterInitAttribute(object $object): void
+    public function afterInitAttribute(object $object, int $target): void
     {
         foreach ($this->rules as $rule) {
             if ($rule instanceof AfterInitAttributeEventInterface) {
-                $rule->afterInitAttribute($object);
+                $rule->afterInitAttribute($object, $target);
             }
         }
     }
@@ -164,4 +164,3 @@ final class On implements
         );
     }
 }
-
