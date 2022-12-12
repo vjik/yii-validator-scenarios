@@ -8,7 +8,7 @@
 [![static analysis](https://github.com/vjik/yii-validator-scenarios/workflows/static%20analysis/badge.svg)](https://github.com/vjik/yii-validator-scenarios/actions?query=workflow%3A%22static+analysis%22)
 [![psalm-level](https://shepherd.dev/github/vjik/yii-validator-scenarios/level.svg)](https://shepherd.dev/github/vjik/yii-validator-scenarios)
 
-The package ...
+The package provides scenarios implementation for [Yii Validator](https://github.com/yiisoft/validator).
 
 ## Requirements
 
