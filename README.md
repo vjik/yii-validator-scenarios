@@ -14,7 +14,8 @@
 [![static analysis](https://github.com/vjik/yii-validator-scenarios/workflows/static%20analysis/badge.svg)](https://github.com/vjik/yii-validator-scenarios/actions?query=workflow%3A%22static+analysis%22)
 [![psalm-level](https://shepherd.dev/github/vjik/yii-validator-scenarios/level.svg)](https://shepherd.dev/github/vjik/yii-validator-scenarios)
 
-The package provides scenarios implementation for [Yii Validator](https://github.com/yiisoft/validator).
+The package provides validator rule `On` that implement the scenarios concept 
+for [Yii Validator](https://github.com/yiisoft/validator).
 
 ## Requirements
 
@@ -29,6 +30,88 @@ composer require vjik/yii-validator-scenarios
 ```
 
 ## General usage
+
+The scenarios concept implement via the rule `On` and a validation context parameter. 
+
+Configure rules:
+
+```php
+use Vjik\Yii\ValidatorScenarios\On;
+use Yiisoft\Validator\Rule\Email;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Required;
+
+final class UserDto
+{
+    public function __construct(
+        #[On(
+            'register',
+            [new Required(), new HasLength(min: 7, max: 10)]
+        )]
+        public string $name,
+
+        #[Required]
+        #[Email]
+        public string $email,
+
+        #[On(
+            ['login', 'register'],
+            [new Required(), new HasLength(min: 8)],
+        )]
+        public string $password,
+    ) {
+    }
+}
+```
+
+Or same without attributes:
+
+```php
+use Vjik\Yii\ValidatorScenarios\On;
+use Yiisoft\Validator\Rule\Email;
+use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\RulesProviderInterface;
+
+final class UserDto implements RulesProviderInterface
+{
+    public function __construct(
+        public string $name,
+        public string $email,
+        public string $password,
+    ) {
+    }
+
+    public function getRules(): iterable
+    {
+        return [
+            'name' => new On(
+                'register',
+                [new Required(), new HasLength(min: 7, max: 10)],
+            ),
+            'email' => [new Required(), new Email()],
+            'password' => new On(
+                ['login', 'register'],
+                [new Required(), new HasLength(min: 8)],
+            ),
+        ];
+    }
+}
+```
+
+Pass the scenario to the validator through the context:
+
+```php
+use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
+
+$result = (new Validator())->validate(
+    $userDto, 
+    context: new ValidationContext([
+        On::SCENARIO_PARAMETER => $scenario,
+    ]),
+);
+```
 
 ## Testing
 
