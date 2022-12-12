@@ -1,7 +1,7 @@
 {
     "name": "vjik/yii-validator-scenarios",
     "type": "library",
-    "description": "Scenarios implementation for Yii Validator",
+    "description": "The scenario feature for Yii Validator",
     "keywords": [
         "yii",
         "validator",
