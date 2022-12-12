@@ -7,7 +7,7 @@ namespace Vjik\Yii\ValidatorScenarios\Tests\Php81;
 use PHPUnit\Framework\TestCase;
 use Vjik\Yii\ValidatorScenarios\On;
 use Vjik\Yii\ValidatorScenarios\Tests\Support\ClassAttribute;
-use Vjik\Yii\ValidatorScenarios\Tests\Support\User;
+use Vjik\Yii\ValidatorScenarios\Tests\Support\UserDto;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
@@ -45,7 +45,7 @@ final class OnTest extends TestCase
      */
     public function testBase(array $expectedMessage, ?string $scenario): void
     {
-        $user = new User(
+        $user = new UserDto(
             name: 'bob',
             email: 'hello.ru',
             password: 'qwerty',
