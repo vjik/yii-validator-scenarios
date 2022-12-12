@@ -21,6 +21,34 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
+ * The rule implement the scenario feature.
+ *
+ * Example:
+ *
+ * ```php
+ * final class UserDto
+ * {
+ *   public function __construct(
+ *     #[On(
+ *       'register',
+ *       [new Required(), new HasLength(min: 7, max: 10)]
+ *     )]
+ *     public string $name,
+ *
+ *     #[Required]
+ *     #[Email]
+ *     public string $email,
+ *
+ *     #[On(
+ *       ['login', 'register'],
+ *       [new Required(), new HasLength(min: 8)],
+ *     )]
+ *     public string $password,
+ *     ) {
+ *     }
+ * }
+ * ```
+ *
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
@@ -47,34 +75,42 @@ final class On implements
      */
     private iterable $rules;
 
+    /**
+     * @var bool|callable|null
+     */
+    private $skipOnEmpty;
+
     private ?RulesDumper $rulesDumper = null;
 
     /**
+     * @param string|Stringable|string[]|Stringable[]|null $scenario The scenario(s) that rules are in. `null` if rules
+     * used always.
+     * @param iterable<callable|RuleInterface>|callable|RuleInterface $rules Rules that will be applied according
+     * to `$scenario`.
+     * @param bool $not Whether the scenario check should be inverted. When this parameter is set `true`, the validator
+     * checks whether the current scenario is among `$scenario` and if NOT, `$rules` will be applied.
+     * @param bool|callable|null $skipOnEmpty Whether skip `$rules` on empty value or not, and which value consider as
+     * empty. More details in {@see SkipOnEmptyInterface}.
+     * @param bool $skipOnError A boolean value where `true` means to skip `$rules` when the previous one errored
+     * and `false` - do not skip.
+     * @param Closure|null $when The closure that allow to apply `$rules` under certain conditions only. More details
+     * in {@see SkipOnErrorInterface}.
+     *
+     * @psalm-param WhenType $when
+     *
      * @throws InvalidArgumentException
      */
     public function __construct(
-        /**
-         * @var string|Stringable|string[]|Stringable[]|null The scenario(s) that rules are in. Null if rules used
-         * always.
-         */
         string|Stringable|array|null $scenario = null,
-        /**
-         * @param iterable<callable|RuleInterface>|callable|RuleInterface Rules to apply.
-         */
         callable|iterable|object $rules = [],
         private bool $not = false,
-        /**
-         * @var bool|callable|null
-         */
-        private $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        /**
-         * @var WhenType
-         */
         private Closure|null $when = null,
     ) {
         $this->setScenarios($scenario);
         $this->rules = RulesNormalizer::normalizeList($rules);
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string

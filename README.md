@@ -14,7 +14,7 @@
 [![static analysis](https://github.com/vjik/yii-validator-scenarios/workflows/static%20analysis/badge.svg)](https://github.com/vjik/yii-validator-scenarios/actions?query=workflow%3A%22static+analysis%22)
 [![psalm-level](https://shepherd.dev/github/vjik/yii-validator-scenarios/level.svg)](https://shepherd.dev/github/vjik/yii-validator-scenarios)
 
-The package provides validator rule `On` that implement the scenarios concept 
+The package provides validator rule `On` that implement the scenario feature 
 for [Yii Validator](https://github.com/yiisoft/validator).
 
 ## Requirements
@@ -31,7 +31,7 @@ composer require vjik/yii-validator-scenarios
 
 ## General usage
 
-The scenarios concept implement via the rule `On` and a validation context parameter. 
+The scenario feature implement via the rule `On` and a validation context parameter. 
 
 Configure rules:
 
@@ -113,7 +113,7 @@ $result = (new Validator())->validate(
 );
 ```
 
-Rules that will be executed according to scenarios:
+Rules that will be applied according to scenarios:
 
 **register**
 
@@ -138,6 +138,34 @@ Rules that will be executed according to scenarios:
 | `name`     | —                   |
 | `email`    | `Required`, `Email` |
 | `password` | —                   |
+
+## `On` rule parameters
+
+**$scenario**
+
+The scenario(s) that `$rules` are in. `null` if rules used always. Defaults to `null`.
+
+**$rules**
+
+Rules that will be applied according to `$scenario`. Defaults to empty array.
+
+**$not**
+
+Whether the scenario check should be inverted. When this parameter is set `true`, the validator checks whether
+the current scenario is among `$scenario` and if NOT, `$rules` will be applied. Defaults to `false`.
+
+**$skipOnEmpty**
+
+Whether skip `$rules` on empty value or not, and which value consider as empty. Defaults to `null`.
+
+**$skipOnError**
+
+A boolean value where `true` means to skip `$rules` when the previous one errored and `false` — do not skip.
+Defaults to `false`.
+
+**$when**
+
+The closure that allow to apply `$rules` under certain conditions only. Defaults to `null`.
 
 ## Testing
 
