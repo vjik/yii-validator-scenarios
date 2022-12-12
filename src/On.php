@@ -102,7 +102,7 @@ final class On implements
      */
     public function __construct(
         string|Stringable|array|null $scenario = null,
-        callable|iterable|object $rules = [],
+        callable|iterable|RuleInterface $rules = [],
         private bool $not = false,
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
