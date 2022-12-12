@@ -113,6 +113,32 @@ $result = (new Validator())->validate(
 );
 ```
 
+Rules that will be executed according to scenarios:
+
+**register**
+
+| Attrubute  | Rules                   |
+|------------|-------------------------|
+| `name`     | `Required`, `HasLength` |
+| `email`    | `Required`, `Email`     |
+| `password` | `Required`, `HasLength` |
+
+**login**
+
+| Attrubute  | Rules                   |
+|------------|-------------------------|
+| `name`     | —                       |
+| `email`    | `Required`, `Email`     |
+| `password` | `Required`, `HasLength` |
+
+**Without scenario**
+
+| Attrubute  | Rules               |
+|------------|---------------------|
+| `name`     | —                   |
+| `email`    | `Required`, `Email` |
+| `password` | —                   |
+
 ## Testing
 
 ### Unit testing
