@@ -118,7 +118,7 @@ final class On implements
         return 'on';
     }
 
-    public function getHandlerClassName(): string
+    public function getHandler(): string
     {
         return OnHandler::class;
     }
