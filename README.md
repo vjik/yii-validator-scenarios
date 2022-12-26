@@ -1,7 +1,5 @@
 <p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px">
-    </a>
+    <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px">
     <h1 align="center">Yii Validator Scenarios</h1>
     <br>
 </p>
