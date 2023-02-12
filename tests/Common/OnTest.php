@@ -64,7 +64,7 @@ final class OnTest extends TestCase
                             'strict' => false,
                             'not' => false,
                             'message' => [
-                                'template' => 'This value is invalid.',
+                                'template' => 'This value is not in the list of acceptable values.',
                                 'parameters' => [],
                             ],
                             'skipOnEmpty' => false,
@@ -76,7 +76,7 @@ final class OnTest extends TestCase
                             'strict' => false,
                             'not' => false,
                             'message' => [
-                                'template' => 'This value is invalid.',
+                                'template' => 'This value is not in the list of acceptable values.',
                                 'parameters' => [],
                             ],
                             'skipOnEmpty' => false,
