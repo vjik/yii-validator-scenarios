@@ -36,7 +36,7 @@ Configure rules:
 ```php
 use Vjik\Yii\ValidatorScenarios\On;
 use Yiisoft\Validator\Rule\Email;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 
 final class UserDto
@@ -44,7 +44,7 @@ final class UserDto
     public function __construct(
         #[On(
             'register',
-            [new Required(), new HasLength(min: 7, max: 10)]
+            [new Required(), new Length(min: 7, max: 10)]
         )]
         public string $name,
 
@@ -54,7 +54,7 @@ final class UserDto
 
         #[On(
             ['login', 'register'],
-            [new Required(), new HasLength(min: 8)],
+            [new Required(), new Length(min: 8)],
         )]
         public string $password,
     ) {
@@ -67,7 +67,7 @@ Or same without attributes:
 ```php
 use Vjik\Yii\ValidatorScenarios\On;
 use Yiisoft\Validator\Rule\Email;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RulesProviderInterface;
 
@@ -85,12 +85,12 @@ final class UserDto implements RulesProviderInterface
         return [
             'name' => new On(
                 'register',
-                [new Required(), new HasLength(min: 7, max: 10)],
+                [new Required(), new Length(min: 7, max: 10)],
             ),
             'email' => [new Required(), new Email()],
             'password' => new On(
                 ['login', 'register'],
-                [new Required(), new HasLength(min: 8)],
+                [new Required(), new Length(min: 8)],
             ),
         ];
     }
@@ -115,19 +115,19 @@ Rules that will be applied according to scenarios:
 
 **register**
 
-| Attrubute  | Rules                   |
-|------------|-------------------------|
-| `name`     | `Required`, `HasLength` |
-| `email`    | `Required`, `Email`     |
-| `password` | `Required`, `HasLength` |
+| Attrubute  | Rules                |
+|------------|----------------------|
+| `name`     | `Required`, `Length` |
+| `email`    | `Required`, `Email`  |
+| `password` | `Required`, `Length` |
 
 **login**
 
-| Attrubute  | Rules                   |
-|------------|-------------------------|
-| `name`     | —                       |
-| `email`    | `Required`, `Email`     |
-| `password` | `Required`, `HasLength` |
+| Attrubute  | Rules                |
+|------------|----------------------|
+| `name`     | —                    |
+| `email`    | `Required`, `Email`  |
+| `password` | `Required`, `Length` |
 
 **Without scenario**
 

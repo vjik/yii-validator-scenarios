@@ -31,7 +31,7 @@ use Yiisoft\Validator\WhenInterface;
  *   public function __construct(
  *     #[On(
  *       'register',
- *       [new Required(), new HasLength(min: 7, max: 10)]
+ *       [new Required(), new Length(min: 7, max: 10)]
  *     )]
  *     public string $name,
  *
@@ -41,7 +41,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  *     #[On(
  *       ['login', 'register'],
- *       [new Required(), new HasLength(min: 8)],
+ *       [new Required(), new Length(min: 8)],
  *     )]
  *     public string $password,
  *     ) {
