@@ -6,7 +6,7 @@ namespace Vjik\Yii\ValidatorScenarios\Tests\Support;
 
 use Vjik\Yii\ValidatorScenarios\On;
 use Yiisoft\Validator\Rule\Email;
-use Yiisoft\Validator\Rule\HasLength;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 
 final class UserDto
@@ -14,7 +14,7 @@ final class UserDto
     public function __construct(
         #[On(
             'register',
-            [new Required(), new HasLength(min: 7, max: 10)]
+            [new Required(), new Length(min: 7, max: 10)]
         )]
         public string $name,
 
@@ -24,7 +24,7 @@ final class UserDto
 
         #[On(
             ['login', 'register'],
-            [new Required(), new HasLength(min: 8)],
+            [new Required(), new Length(min: 8)],
         )]
         public string $password,
     ) {
