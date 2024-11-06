@@ -4,9 +4,9 @@
     <br>
 </p>
 
-[![Latest Stable Version](https://poser.pugx.org/vjik/yii-validator-scenarios/v/stable.png)](https://packagist.org/packages/vjik/yii-validator-scenarios)
-[![Total Downloads](https://poser.pugx.org/vjik/yii-validator-scenarios/downloads.png)](https://packagist.org/packages/vjik/yii-validator-scenarios)
-[![Build status](https://github.com/vjik/yii-validator-scenarios/workflows/build/badge.svg)](https://github.com/vjik/yii-validator-scenarios/actions?query=workflow%3Abuild)
+[![Latest Stable Version](https://poser.pugx.org/vjik/yii-validator-scenarios/v)](https://packagist.org/packages/vjik/yii-validator-scenarios)
+[![Total Downloads](https://poser.pugx.org/vjik/yii-validator-scenarios/downloads)](https://packagist.org/packages/vjik/yii-validator-scenarios)
+[![Build status](https://github.com/vjik/yii-validator-scenarios/actions/workflows/build.yml/badge.svg)](https://github.com/vjik/yii-validator-scenarios/actions/workflows/build.yml)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fvjik%2Fyii-validator-scenarios%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/vjik/yii-validator-scenarios/master)
 [![type-coverage](https://shepherd.dev/github/vjik/yii-validator-scenarios/coverage.svg)](https://shepherd.dev/github/vjik/yii-validator-scenarios)
 [![static analysis](https://github.com/vjik/yii-validator-scenarios/workflows/static%20analysis/badge.svg)](https://github.com/vjik/yii-validator-scenarios/actions?query=workflow%3A%22static+analysis%22)
