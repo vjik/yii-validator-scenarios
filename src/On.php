@@ -192,11 +192,11 @@ final class On implements
                 throw new InvalidArgumentException(
                     sprintf(
                         'Scenario must be null, a string, or an array of strings or an array of "\Stringable", "%s" given.',
-                        get_debug_type($scenario)
+                        get_debug_type($scenario),
                     ),
                 );
             },
-            is_array($sourceScenario) ? $sourceScenario : [$sourceScenario]
+            is_array($sourceScenario) ? $sourceScenario : [$sourceScenario],
         );
     }
 }

@@ -124,7 +124,7 @@ final class OnTest extends TestCase
         $this->assertSame(
             [
                 'a' => [
-                    'Value must be no greater than 2.'
+                    'Value must be no greater than 2.',
                 ],
             ],
             $result->getErrorMessagesIndexedByPath(),
@@ -272,7 +272,7 @@ final class OnTest extends TestCase
 
         $this->expectException(UnexpectedRuleException::class);
         $this->expectExceptionMessage(
-            'Expected "Vjik\Yii\ValidatorScenarios\On", but "Yiisoft\Validator\Rule\Number" given.'
+            'Expected "Vjik\Yii\ValidatorScenarios\On", but "Yiisoft\Validator\Rule\Number" given.',
         );
         $handler->validate(7, $rule, $context);
     }
