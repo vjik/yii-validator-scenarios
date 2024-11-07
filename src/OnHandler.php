@@ -32,8 +32,8 @@ final class OnHandler implements RuleHandlerInterface
                 ->addError(
                     sprintf(
                         'Scenario must be null, a string or "\Stringable" type, "%s" given.',
-                        get_debug_type($scenario)
-                    )
+                        get_debug_type($scenario),
+                    ),
                 );
         }
 
