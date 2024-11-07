@@ -1,6 +1,7 @@
 name: cs fixer
 
-on: [ pull_request ]
+on:
+  pull_request_target:
 
 jobs:
   php-cs-fixer:
@@ -11,7 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.VJIK_GITHUB_TOKEN }}
           ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
@@ -31,3 +34,4 @@ jobs:
         with:
           commit_message: "Apply PHP CS Fixer changes (CI)"
           file_pattern: '*.php'
+          disable_globbing: true
