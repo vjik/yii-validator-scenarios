@@ -106,7 +106,7 @@ final class On implements
         private bool $not = false,
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private Closure|null $when = null
     ) {
         $this->setScenarios($scenario);
         $this->rules = RulesNormalizer::normalizeList($rules);
