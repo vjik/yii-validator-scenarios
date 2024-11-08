@@ -53,6 +53,7 @@ use function sprintf;
  * }
  * ```
  *
+ * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  *
  * @api
@@ -97,6 +98,7 @@ final class On implements
      * @param Closure|null $when The closure that allow to apply `$rules` under certain conditions only. More details
      * in {@see SkipOnErrorInterface}.
      *
+     * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
      *
      * @throws InvalidArgumentException
