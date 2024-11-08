@@ -27,22 +27,22 @@ final class OnTest extends TestCase
         return [
             'without scenario' => [
                 [
-                    'email' => ['This value is not a valid email address.'],
+                    'email' => ['Email is not a valid email address.'],
                 ],
                 null,
             ],
             'login' => [
                 [
-                    'email' => ['This value is not a valid email address.'],
-                    'password' => [ 'This value must contain at least 8 characters.'],
+                    'email' => ['Email is not a valid email address.'],
+                    'password' => ['Password must contain at least 8 characters.'],
                 ],
                 'login',
             ],
             'register' => [
                 [
-                    'name' => ['This value must contain at least 7 characters.'],
-                    'email' => ['This value is not a valid email address.'],
-                    'password' => [ 'This value must contain at least 8 characters.'],
+                    'name' => ['Name must contain at least 7 characters.'],
+                    'email' => ['Email is not a valid email address.'],
+                    'password' => ['Password must contain at least 8 characters.'],
                 ],
                 'register',
             ],
@@ -79,7 +79,7 @@ final class OnTest extends TestCase
 
         $this->assertSame(
             [
-                'a' => ['Value must be no less than 5.'],
+                'a' => ['A must be no less than 5.'],
                 '' => ['test error'],
             ],
             $result->getErrorMessagesIndexedByPath(),
@@ -92,7 +92,7 @@ final class OnTest extends TestCase
 
         $rules = $rule->getRules();
 
-        $this->assertSame('on', $rule->getName());
+        $this->assertSame(On::class, $rule->getName());
         $this->assertNull($rule->getScenarios());
         $this->assertInstanceOf(Traversable::class, $rules);
         $this->assertSame([], iterator_to_array($rules));
@@ -126,24 +126,24 @@ final class OnTest extends TestCase
                     'scenarios' => ['test'],
                     'rules' => [
                         [
-                            'inRange',
+                            In::class,
                             'values' => [1, 2],
                             'strict' => false,
                             'not' => false,
                             'message' => [
-                                'template' => 'This value is not in the list of acceptable values.',
+                                'template' => '{Property} is not in the list of acceptable values.',
                                 'parameters' => [],
                             ],
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
                         ],
                         [
-                            'inRange',
+                            In::class,
                             'values' => [3, 4],
                             'strict' => false,
                             'not' => false,
                             'message' => [
-                                'template' => 'This value is not in the list of acceptable values.',
+                                'template' => '{Property} is not in the list of acceptable values.',
                                 'parameters' => [],
                             ],
                             'skipOnEmpty' => false,
@@ -189,7 +189,7 @@ final class OnTest extends TestCase
         $this->assertSame(
             [
                 'a' => [
-                    'Value must be no greater than 2.',
+                    'A must be no greater than 2.',
                 ],
             ],
             $result->getErrorMessagesIndexedByPath(),
@@ -202,8 +202,8 @@ final class OnTest extends TestCase
             [
                 [
                     'a' => [
-                        'Value must be no greater than 1.',
-                        'Value must be no greater than 2.',
+                        'A must be no greater than 1.',
+                        'A must be no greater than 2.',
                     ],
                 ],
                 ['a' => 7],
@@ -218,8 +218,8 @@ final class OnTest extends TestCase
             [
                 [
                     'a' => [
-                        'Value must be no greater than 1.',
-                        'Value must be no greater than 2.',
+                        'A must be no greater than 1.',
+                        'A must be no greater than 2.',
                     ],
                 ],
                 ['a' => 7],
@@ -234,7 +234,7 @@ final class OnTest extends TestCase
             [
                 [
                     'a' => [
-                        'Value must be no greater than 2.',
+                        'A must be no greater than 2.',
                     ],
                 ],
                 ['a' => 7],
@@ -249,7 +249,7 @@ final class OnTest extends TestCase
             [
                 [
                     'a' => [
-                        'Value must be no greater than 1.',
+                        'A must be no greater than 1.',
                     ],
                 ],
                 ['a' => 7],
@@ -264,7 +264,7 @@ final class OnTest extends TestCase
             [
                 [
                     'a' => [
-                        'Value must be no greater than 2.',
+                        'A must be no greater than 2.',
                     ],
                 ],
                 ['a' => 7],
@@ -289,10 +289,10 @@ final class OnTest extends TestCase
             [
                 [
                     'a' => [
-                        'Value must be no greater than 1.',
-                        'Value must be no greater than 2.',
-                        'Value must be no greater than 3.',
-                        'Value must be no greater than 5.',
+                        'A must be no greater than 1.',
+                        'A must be no greater than 2.',
+                        'A must be no greater than 3.',
+                        'A must be no greater than 5.',
                     ],
                 ],
                 ['a' => 7],
