@@ -2,7 +2,7 @@
 
 ## 1.0.1 under development
 
-- no changes in this release.
+- Enh #8: Bump minimal PHP version to 8.1 and refactor.
 
 ## 1.0.0 February 22, 2023
 
