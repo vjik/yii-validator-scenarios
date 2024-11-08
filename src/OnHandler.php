@@ -11,6 +11,13 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function in_array;
+use function is_string;
+use function sprintf;
+
+/**
+ * @api
+ */
 final class OnHandler implements RuleHandlerInterface
 {
     /**
@@ -22,7 +29,6 @@ final class OnHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(On::class, $rule);
         }
 
-        /** @var mixed $scenario */
         $scenario = $context->getParameter(On::SCENARIO_PARAMETER);
 
         try {
