@@ -9,13 +9,13 @@ use Closure;
 use InvalidArgumentException;
 use Stringable;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -59,7 +59,7 @@ use function sprintf;
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class On implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
@@ -80,11 +80,6 @@ final class On implements
      * @var iterable<int, RuleInterface>
      */
     private iterable $rules;
-
-    /**
-     * @var bool|callable|null
-     */
-    private $skipOnEmpty;
 
     private ?RulesDumper $rulesDumper = null;
 
@@ -121,7 +116,7 @@ final class On implements
 
     public function getName(): string
     {
-        return 'on';
+        return self::class;
     }
 
     public function getHandler(): string
