@@ -2,15 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Vjik\Yii\ValidatorScenarios\Tests\Common;
+namespace Vjik\Yii\ValidatorScenarios\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Traversable;
 use Vjik\Yii\ValidatorScenarios\On;
 use Vjik\Yii\ValidatorScenarios\OnHandler;
+use Vjik\Yii\ValidatorScenarios\Tests\Support\ClassAttribute;
 use Vjik\Yii\ValidatorScenarios\Tests\Support\StringableObject;
+use Vjik\Yii\ValidatorScenarios\Tests\Support\UserDto;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Number;
@@ -19,6 +22,70 @@ use Yiisoft\Validator\Validator;
 
 final class OnTest extends TestCase
 {
+    public static function dataBase(): array
+    {
+        return [
+            'without scenario' => [
+                [
+                    'email' => ['This value is not a valid email address.'],
+                ],
+                null,
+            ],
+            'login' => [
+                [
+                    'email' => ['This value is not a valid email address.'],
+                    'password' => [ 'This value must contain at least 8 characters.'],
+                ],
+                'login',
+            ],
+            'register' => [
+                [
+                    'name' => ['This value must contain at least 7 characters.'],
+                    'email' => ['This value is not a valid email address.'],
+                    'password' => [ 'This value must contain at least 8 characters.'],
+                ],
+                'register',
+            ],
+        ];
+    }
+
+    #[DataProvider('dataBase')]
+    public function testBase(array $expectedMessage, ?string $scenario): void
+    {
+        $user = new UserDto(
+            name: 'bob',
+            email: 'hello.ru',
+            password: 'qwerty',
+        );
+
+        $result = (new Validator())->validate(
+            $user,
+            context: new ValidationContext([
+                On::SCENARIO_PARAMETER => $scenario,
+            ]),
+        );
+
+        $this->assertSame($expectedMessage, $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testClassAttribute(): void
+    {
+        $result = (new Validator())->validate(
+            new ClassAttribute(),
+            context: new ValidationContext([
+                On::SCENARIO_PARAMETER => 'test',
+            ]),
+        );
+
+        $this->assertSame(
+            [
+                'a' => ['Value must be no less than 5.'],
+                '' => ['test error'],
+            ],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+    }
+
     public function testDefaults(): void
     {
         $rule = new On();
@@ -31,7 +98,7 @@ final class OnTest extends TestCase
         $this->assertSame([], iterator_to_array($rules));
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             [
@@ -99,9 +166,7 @@ final class OnTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataOptions
-     */
+    #[DataProvider('dataOptions')]
     public function testOptions(array $expected, On $rule): void
     {
         $this->assertSame($expected, $rule->getOptions());
@@ -131,7 +196,7 @@ final class OnTest extends TestCase
         );
     }
 
-    public function dataWithScenario(): array
+    public static function dataWithScenario(): array
     {
         return [
             [
@@ -245,9 +310,7 @@ final class OnTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataWithScenario
-     */
+    #[DataProvider('dataWithScenario')]
     public function testWithScenario(array $expectedMessages, mixed $data, array $rules, mixed $scenario): void
     {
         $result = (new Validator())->validate(
@@ -277,7 +340,7 @@ final class OnTest extends TestCase
         $handler->validate(7, $rule, $context);
     }
 
-    public function dataInvalidRuleScenario(): array
+    public static function dataInvalidRuleScenario(): array
     {
         return [
             'null' => [
@@ -291,9 +354,7 @@ final class OnTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataInvalidRuleScenario
-     */
+    #[DataProvider('dataInvalidRuleScenario')]
     public function testInvalidRuleScenario(string $expectedMessage, mixed $scenario): void
     {
         $this->expectException(InvalidArgumentException::class);

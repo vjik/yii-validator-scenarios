@@ -18,7 +18,7 @@ for [Yii Validator](https://github.com/yiisoft/validator).
 
 ## Requirements
 
-- PHP 8.0 or higher.
+- PHP 8.1 or higher.
 
 ## Installation
 

@@ -20,6 +20,10 @@ use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
+use function is_array;
+use function is_string;
+use function sprintf;
+
 /**
  * The rule implement the scenario feature.
  *
@@ -50,6 +54,8 @@ use Yiisoft\Validator\WhenInterface;
  * ```
  *
  * @psalm-import-type WhenType from WhenInterface
+ *
+ * @api
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class On implements
